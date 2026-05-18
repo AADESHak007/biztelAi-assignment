@@ -9,7 +9,7 @@ Each field MUST be an object containing a "value" and a "confidence" estimate be
 JSON Structure:
 {
   "date": { "value": "YYYY-MM-DD", "confidence": 0.95 },
-  "shift": { "value": "A", "confidence": 0.90 }, // Expected: A, B, or C. If handwritten shows something else, extract it.
+  "shift": { "value": "1", "confidence": 0.90 }, // Expected: 1, 2, or 3. If handwritten shows something else, extract it.
   "employeeNum": { "value": "EMP-XXXX", "confidence": 0.85 }, // Employee / operator code.
   "opCode": { "value": "OP-XXXX", "confidence": 0.80 }, // Operation or Activity code.
   "machineNum": { "value": "MC-XXXX", "confidence": 0.92 }, // Machine or Station number.
@@ -151,7 +151,7 @@ function simulateExtraction(fileName: string): OperationalRecord["fields"] {
   if (lowerName.includes("suspicious") || lowerName.includes("high") || lowerName.includes("anomalous")) {
     return {
       date: { value: todayStr, confidence: 0.91 },
-      shift: { value: "B", confidence: 0.88 },
+      shift: { value: "2", confidence: 0.88 },
       employeeNum: { value: "EMP-4100", confidence: 0.93 },
       opCode: { value: "OP-WELD", confidence: 0.72 },
       machineNum: { value: "MC-W2", confidence: 0.85 },
@@ -165,7 +165,7 @@ function simulateExtraction(fileName: string): OperationalRecord["fields"] {
   if (lowerName.includes("missing") || lowerName.includes("empty") || lowerName.includes("zero")) {
     return {
       date: { value: todayStr, confidence: 0.90 },
-      shift: { value: "C", confidence: 0.92 },
+      shift: { value: "3", confidence: 0.92 },
       employeeNum: { value: "", confidence: 0.20 }, // Missing field
       opCode: { value: "OP-DRILL", confidence: 0.80 },
       machineNum: { value: "MC-B2", confidence: 0.78 },
@@ -179,7 +179,7 @@ function simulateExtraction(fileName: string): OperationalRecord["fields"] {
   if (lowerName.includes("dup") || lowerName.includes("duplicate")) {
     return {
       date: { value: todayStr, confidence: 0.95 },
-      shift: { value: "A", confidence: 0.94 },
+      shift: { value: "1", confidence: 0.94 },
       employeeNum: { value: "EMP-3044", confidence: 0.91 },
       opCode: { value: "OP-PAINT", confidence: 0.89 },
       machineNum: { value: "MC-P1", confidence: 0.92 },
@@ -193,7 +193,7 @@ function simulateExtraction(fileName: string): OperationalRecord["fields"] {
   if (lowerName.includes("weld")) {
     return {
       date: { value: todayStr, confidence: 0.89 },
-      shift: { value: "A", confidence: 0.94 },
+      shift: { value: "1", confidence: 0.94 },
       employeeNum: { value: "EMP-4022", confidence: 0.74 }, // Medium confidence
       opCode: { value: "OP-WELD", confidence: 0.91 },
       machineNum: { value: "MC-W3", confidence: 0.88 },
@@ -207,7 +207,7 @@ function simulateExtraction(fileName: string): OperationalRecord["fields"] {
   if (lowerName.includes("drill")) {
     return {
       date: { value: todayStr, confidence: 0.96 },
-      shift: { value: "B", confidence: 0.95 },
+      shift: { value: "2", confidence: 0.95 },
       employeeNum: { value: "EMP-1082", confidence: 0.91 },
       opCode: { value: "OP-DRILL", confidence: 0.89 },
       machineNum: { value: "MC-D2", confidence: 0.93 },
@@ -229,7 +229,7 @@ function simulateExtraction(fileName: string): OperationalRecord["fields"] {
 
   return {
     date: { value: todayStr, confidence: 0.97 },
-    shift: { value: ["A", "B", "C"][Math.floor(Math.random() * 3)], confidence: 0.96 },
+    shift: { value: ["1", "2", "3"][Math.floor(Math.random() * 3)], confidence: 0.96 },
     employeeNum: { value: randEmp, confidence: 0.92 },
     opCode: { value: randOp, confidence: 0.88 },
     machineNum: { value: randMc, confidence: 0.94 },

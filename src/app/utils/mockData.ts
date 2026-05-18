@@ -26,13 +26,13 @@ export interface OperationalRecord {
 export const INITIAL_MOCK_RECORDS: OperationalRecord[] = [
   {
     id: "rec-1",
-    fileName: "shift_log_2026-05-15_A.png",
+    fileName: "shift_log_2026-05-15_1.png",
     fileSize: "2.4 MB",
     uploadedAt: "2026-05-15T08:30:00Z",
     status: "valid",
     fields: {
       date: { value: "2026-05-15", confidence: 0.98 },
-      shift: { value: "A", confidence: 0.95 },
+      shift: { value: "1", confidence: 0.95 },
       employeeNum: { value: "EMP-4022", confidence: 0.92 },
       opCode: { value: "OP-WELD", confidence: 0.89 },
       machineNum: { value: "MC-A1", confidence: 0.94 },
@@ -59,7 +59,7 @@ export const INITIAL_MOCK_RECORDS: OperationalRecord[] = [
       timeTaken: { value: 6.5, confidence: 0.87 }
     },
     validationErrors: [
-      "Invalid shift value 'D'. Expected 'A', 'B', or 'C'.",
+      "Invalid shift value 'D'. Expected '1', '2', or '3'.",
       "Quantity produced cannot be zero or empty."
     ]
   },
@@ -71,7 +71,7 @@ export const INITIAL_MOCK_RECORDS: OperationalRecord[] = [
     status: "exception",
     fields: {
       date: { value: "2026-05-16", confidence: 0.92 },
-      shift: { value: "B", confidence: 0.91 },
+      shift: { value: "2", confidence: 0.91 },
       employeeNum: { value: "", confidence: 0.35 }, // Exception: Missing mandatory field
       opCode: { value: "OP-WELD", confidence: 0.80 },
       machineNum: { value: "MC-C3", confidence: 0.88 },
@@ -94,7 +94,7 @@ export const INITIAL_MOCK_RECORDS: OperationalRecord[] = [
     status: "reviewed",
     fields: {
       date: { value: "2026-05-17", confidence: 0.99 },
-      shift: { value: "C", confidence: 0.97 },
+      shift: { value: "3", confidence: 0.97 },
       employeeNum: { value: "EMP-3044", confidence: 0.98 },
       opCode: { value: "OP-ASSEM", confidence: 0.95 },
       machineNum: { value: "MC-A2", confidence: 0.96 },
@@ -113,7 +113,7 @@ export const INITIAL_MOCK_RECORDS: OperationalRecord[] = [
     status: "valid",
     fields: {
       date: { value: "2026-05-17", confidence: 0.94 },
-      shift: { value: "B", confidence: 0.96 },
+      shift: { value: "2", confidence: 0.96 },
       employeeNum: { value: "EMP-9118", confidence: 0.91 },
       opCode: { value: "OP-PAINT", confidence: 0.93 },
       machineNum: { value: "MC-P1", confidence: 0.92 },

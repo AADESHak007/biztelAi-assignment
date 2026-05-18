@@ -40,13 +40,13 @@ export async function validateFields(
     errors.push({ field: "workOrderNum", errorType: "MISSING_FIELD", errorMessage: "Work Order Number is a mandatory field." });
   }
 
-  // 2. Shift value validation
-  const shiftVal = fields.shift?.trim().toUpperCase();
-  if (shiftVal && !["A", "B", "C"].includes(shiftVal)) {
+  // 2. Shift value validation (must be 1, 2, or 3)
+  const shiftVal = fields.shift?.trim();
+  if (shiftVal && !["1", "2", "3"].includes(shiftVal)) {
     errors.push({
       field: "shift",
       errorType: "INVALID_SHIFT",
-      errorMessage: `Invalid shift value '${fields.shift}'. Expected 'A', 'B', or 'C'.`,
+      errorMessage: `Invalid shift value '${fields.shift}'. Expected '1', '2', or '3'.`,
     });
   }
 

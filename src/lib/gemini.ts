@@ -10,7 +10,7 @@ Confidence reflects how legible and certain you are of that specific value.
 
 {
   "date":         { "value": "YYYY-MM-DD", "confidence": 0.95 },
-  "shift":        { "value": "A",          "confidence": 0.90 },
+  "shift":        { "value": "1",          "confidence": 0.90 },
   "employeeNum":  { "value": "EMP-XXXX",   "confidence": 0.85 },
   "opCode":       { "value": "OP-XXXX",    "confidence": 0.80 },
   "machineNum":   { "value": "MC-XXXX",    "confidence": 0.92 },
@@ -20,7 +20,7 @@ Confidence reflects how legible and certain you are of that specific value.
 }
 
 Rules:
-- shift must be "A", "B", or "C" — if unclear extract whatever you see
+- shift must be "1", "2", or "3" — if unclear extract whatever you see
 - quantity and timeTaken are numbers — use null if completely unreadable
 - If a field is blank or missing in the document, use "" for strings, null for numbers, and confidence 0.0
 `.trim();

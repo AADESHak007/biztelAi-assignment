@@ -25,10 +25,10 @@ export function validateRecord(
     errors.push("Work Order Number is a mandatory field.");
   }
 
-  // 2. Shift values validation
-  const shiftVal = String(shift.value).trim().toUpperCase();
-  if (shift.value && !["A", "B", "C"].includes(shiftVal)) {
-    errors.push(`Invalid shift value '${shift.value}'. Expected 'A', 'B', or 'C'.`);
+  // 2. Shift values validation (must be 1, 2, or 3)
+  const shiftVal = String(shift.value).trim();
+  if (shift.value && !["1", "2", "3"].includes(shiftVal)) {
+    errors.push(`Invalid shift value '${shift.value}'. Expected '1', '2', or '3'.`);
   }
 
   // 3. Machine code format validation (e.g., must contain a number and MC- prefix ideally, or MC)

@@ -13,7 +13,7 @@ Designed with a state-of-the-art **glassmorphic Midnight-Cyber aesthetic**, util
    - **Heuristic OCR Simulator**: No API key? No problem! In Mock Mode, the system analyzes filenames to generate realistic mock sheets (complete with varying confidence levels and validation discrepancies) to demonstrate real-world operational workflows.
 
 2. **Automated Business Rules & Exception Handling**
-   - **Real-Time Validation Checks**: Detects missing fields, invalid shifts (expected: `A`, `B`, or `C`), incorrect machine codes (must start with `MC`), duplicate work orders in history, suspicious quantities (>1000), and extreme shift durations (>12 hours).
+   - **Real-Time Validation Checks**: Detects missing fields, invalid shifts (expected: `1`, `2`, or `3`), incorrect machine codes (must start with `MC`), duplicate work orders in history, suspicious quantities (>1000), and extreme shift durations (>12 hours).
    - **Supervisor Override Auditing**: Discrepancies are highlighted in neon orange with a slide-out review panel. Supervisors can override validations, edit parameters, and provide mandatory audit log justifications.
 
 3. **Responsive Bento Grid Operations Dashboard**

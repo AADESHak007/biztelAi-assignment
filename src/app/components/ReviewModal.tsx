@@ -32,6 +32,22 @@ export default function ReviewModal({ record, allRecords, isOpen, onClose, onSav
   const [successSaved, setSuccessSaved] = useState(false);
   const [pendingAdvance, setPendingAdvance] = useState(false);
 
+  // Premium custom glassmorphic alert/confirm dialog state
+  const [customDialog, setCustomDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: "confirm" | "alert";
+    confirmText?: string;
+    cancelText?: string;
+    onConfirm?: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "alert",
+  });
+
   // Filter sister records for the same upload
   const sisterRecords = React.useMemo(() => {
     if (!record) return [];
@@ -95,35 +111,48 @@ export default function ReviewModal({ record, allRecords, isOpen, onClose, onSav
 
   const handleDeleteRecord = async () => {
     if (!activeRecord) return;
-    if (!confirm("Are you sure you want to delete this digitized record?")) {
-      return;
-    }
+    
+    setCustomDialog({
+      isOpen: true,
+      title: "Delete Digitized Record",
+      message: "Are you sure you want to permanently delete this digitized operational record? This action cannot be undone.",
+      type: "confirm",
+      confirmText: "Delete Record",
+      cancelText: "Cancel",
+      onConfirm: async () => {
+        try {
+          setIsDeleting(true);
+          const res = await fetch(`/api/records/${activeRecord.id}`, {
+            method: "DELETE",
+          });
 
-    try {
-      setIsDeleting(true);
-      const res = await fetch(`/api/records/${activeRecord.id}`, {
-        method: "DELETE",
-      });
+          if (!res.ok) {
+            throw new Error("Failed to delete record.");
+          }
 
-      if (!res.ok) {
-        throw new Error("Failed to delete record.");
+          onDelete(activeRecord.id);
+          
+          // Auto-select another sister record if one exists, otherwise modal closes
+          const remainingSiblings = sisterRecords.filter((r) => r.id !== activeRecord.id);
+          if (remainingSiblings.length > 0) {
+            setActiveRecordId(remainingSiblings[0].id);
+          } else {
+            onClose();
+          }
+        } catch (err) {
+          console.error("[handleDeleteRecord]", err);
+          setCustomDialog({
+            isOpen: true,
+            title: "Deletion Failed",
+            message: err instanceof Error ? err.message : "An unexpected error occurred while deleting the record.",
+            type: "alert",
+            confirmText: "Dismiss"
+          });
+        } finally {
+          setIsDeleting(false);
+        }
       }
-
-      onDelete(activeRecord.id);
-      
-      // Auto-select another sister record if one exists, otherwise modal closes
-      const remainingSiblings = sisterRecords.filter((r) => r.id !== activeRecord.id);
-      if (remainingSiblings.length > 0) {
-        setActiveRecordId(remainingSiblings[0].id);
-      } else {
-        onClose();
-      }
-    } catch (err) {
-      console.error("[handleDeleteRecord]", err);
-      alert(err instanceof Error ? err.message : "Deletion failed.");
-    } finally {
-      setIsDeleting(false);
-    }
+    });
   };
 
   // snappy local validation helper
@@ -207,7 +236,13 @@ export default function ReviewModal({ record, allRecords, isOpen, onClose, onSav
 
     } catch (err) {
       console.error(err);
-      alert(err instanceof Error ? err.message : "Error saving corrections.");
+      setCustomDialog({
+        isOpen: true,
+        title: "Save Failed",
+        message: err instanceof Error ? err.message : "Error saving corrections.",
+        type: "alert",
+        confirmText: "Dismiss"
+      });
     } finally {
       setIsSaving(false);
     }
@@ -346,7 +381,7 @@ export default function ReviewModal({ record, allRecords, isOpen, onClose, onSav
                       type="text"
                       value={shift}
                       onChange={(e) => setShift(e.target.value)}
-                      placeholder="A, B, or C"
+                      placeholder="1, 2, or 3"
                       className="w-full bg-zinc-950 border border-zinc-850 focus:border-cyan-500/50 rounded-lg py-1 px-2.5 text-xs text-white focus:outline-none font-bold font-mono"
                     />
                   </div>
@@ -542,6 +577,61 @@ export default function ReviewModal({ record, allRecords, isOpen, onClose, onSav
         </div>
 
       </div>
+
+      {/* Custom Glassmorphic Alert/Confirm Dialog Modal */}
+      {customDialog.isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/70 backdrop-blur-md animate-fade-in p-4">
+          <div className="bg-zinc-900/95 border border-zinc-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl backdrop-blur-2xl relative overflow-hidden text-center">
+            {/* Top gradient highlight banner */}
+            <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${customDialog.type === "confirm" ? "from-rose-500 via-amber-500 to-rose-500" : "from-red-500 via-zinc-800 to-red-500"}`}></div>
+            
+            {/* Context Icon */}
+            <div className="mx-auto w-12 h-12 rounded-full bg-zinc-950 border border-zinc-850 flex items-center justify-center mb-4">
+              {customDialog.type === "confirm" ? (
+                <AlertTriangle className="w-6 h-6 text-rose-500 animate-pulse" />
+              ) : (
+                <X className="w-6 h-6 text-red-500" />
+              )}
+            </div>
+
+            <h3 className="text-sm font-bold text-white mb-2 font-mono">
+              {customDialog.title}
+            </h3>
+            
+            <p className="text-xs text-zinc-400 font-mono mb-6 leading-relaxed">
+              {customDialog.message}
+            </p>
+
+            <div className="flex items-center justify-center gap-3">
+              {customDialog.type === "confirm" && (
+                <button
+                  type="button"
+                  onClick={() => setCustomDialog(prev => ({ ...prev, isOpen: false }))}
+                  className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg text-xs font-bold font-mono border border-zinc-700 transition-colors cursor-pointer"
+                >
+                  {customDialog.cancelText || "Cancel"}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomDialog(prev => ({ ...prev, isOpen: false }));
+                  if (customDialog.onConfirm) {
+                    customDialog.onConfirm();
+                  }
+                }}
+                className={`px-4 py-2 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer shadow-md ${
+                  customDialog.type === "confirm" 
+                    ? "bg-rose-600 hover:bg-rose-500 text-white shadow-rose-950/20" 
+                    : "bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 shadow-zinc-950/20"
+                }`}
+              >
+                {customDialog.confirmText || "OK"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

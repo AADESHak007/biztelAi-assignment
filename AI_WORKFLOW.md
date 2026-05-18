@@ -61,7 +61,7 @@ Each field MUST contain "value" and "confidence" (0.0 to 1.0) parameters.
 JSON Structure:
 {
   "date": { "value": "YYYY-MM-DD", "confidence": 0.95 },
-  "shift": { "value": "A", "confidence": 0.90 },
+  "shift": { "value": "1", "confidence": 0.90 },
   ...
 }
 ```
