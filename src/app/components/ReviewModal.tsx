@@ -169,9 +169,9 @@ export default function ReviewModal({ record, allRecords, isOpen, onClose, onSav
     if (!workOrderNum.trim()) errors.push("Work Order Number is a mandatory field.");
 
     // Format matches
-    const shiftUpper = shift.trim().toUpperCase();
-    if (shift.trim() && !["A", "B", "C"].includes(shiftUpper)) {
-      errors.push(`Invalid shift code '${shift}'. Must be A, B, or C.`);
+    const shiftTrimmed = shift.trim();
+    if (shift.trim() && !["1", "2", "3"].includes(shiftTrimmed)) {
+      errors.push(`Invalid shift code '${shift}'. Must be 1, 2, or 3.`);
     }
 
     const machineUpper = machineNum.trim().toUpperCase();
